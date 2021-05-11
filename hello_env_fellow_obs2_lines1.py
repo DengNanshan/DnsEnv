@@ -13,7 +13,7 @@ import datetime
 config = {
     "observation": {
         "type": "Kinematics",
-        "vehicles_count": 5,
+        "vehicles_count": 2,
         "features": ["presence", "x", "y", "vx", "vy", "cos_h", "sin_h"],
         "features_range": {
             "x": [-100, 100],
@@ -58,7 +58,7 @@ env.reset()
 
 
 model= DQN(MlpPolicy,env,verbose=1,
-           tensorboard_log="../Date/tensorboard_log/")
+           tensorboard_log="../Data/tensorboard_log_fello/")
 
 
 
@@ -73,10 +73,13 @@ del model
 
 model=DQN.load(('../Data/hellohighway'),env)
 obs=env.reset()
-# while (True):
-#     action, _state = model.predict(obs)
-#     obs,reward,dones,info=env.step(action)
-#     env.render()
+i=0
+while i<100:
+    i=i+1
+    # action, _state = model.predict(obs)
+    action=1
+    obs,reward,dones,info=env.step(action)
+    env.render()
 
 
 

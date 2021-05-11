@@ -27,7 +27,7 @@ config = {
     "action": {
         "type": "DiscreteMetaAction",
     },
-    "lanes_count": 1,
+    "lanes_count": 4,
     "initial_lane_id": None,
     "vehicles_count": 50,
     "controlled_vehicles": 1,

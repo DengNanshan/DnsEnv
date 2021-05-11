@@ -13,7 +13,7 @@ import datetime
 config = {
     "observation": {
         "type": "Kinematics",
-        "vehicles_count": 5,
+        "vehicles_count": 2,
         "features": ["presence", "x", "y", "vx", "vy", "cos_h", "sin_h"],
         "features_range": {
             "x": [-100, 100],
@@ -29,7 +29,7 @@ config = {
     },
     "lanes_count": 1,
     "initial_lane_id": None,
-    "vehicles_count": 50,
+    "vehicles_count": 20,
     "controlled_vehicles": 1,
     "duration": 40,  # [s]
     "ego_spacing": 2,
@@ -58,25 +58,29 @@ env.reset()
 
 
 model= DQN(MlpPolicy,env,verbose=1,
-           tensorboard_log="../Date/tensorboard_log/")
+           tensorboard_log="../Data/tensorboard_log_fello/")
 
 
 
 
 timetemp=datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-checkpoint_callback=CheckpointCallback(save_freq=100, save_path='../Data/'+timetemp,name_prefix='deeq_highway_check')
+checkpoint_callback=CheckpointCallback(save_freq=1000, save_path='../Data/'+timetemp,name_prefix='deeq_highway_check')
 callbacks=CallbackList([checkpoint_callback])
-model.learn(20000,callback=callbacks)
+model.learn(1000,callback=callbacks)
 model.save('../Data/hellohighway')
 
 del model
 
 model=DQN.load(('../Data/hellohighway'),env)
 obs=env.reset()
-# while (True):
-#     action, _state = model.predict(obs)
-#     obs,reward,dones,info=env.step(action)
-#     env.render()
+i=0
+while i<100:
+    i=i+1
+    # action, _state = model.predict(obs)
+    action=1
+    obs,reward,dones,info=env.step(action)
+    print(reward)
+    # env.render()
 
 
 
