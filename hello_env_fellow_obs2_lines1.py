@@ -1,14 +1,13 @@
 import gym
-import tkinter as tk
+# import tkinter as tk
 import highway_env
 import matplotlib
-matplotlib.use('TkAgg')
 from matplotlib import pyplot as plt
-from stable_baselines.deepq.policies import MlpPolicy
-from stable_baselines import DQN
-import tensorflow as tf
+from stable_baselines3.dqn.policies import MlpPolicy
+from stable_baselines3 import DQN
+import torch as th
 
-from stable_baselines.common.callbacks import EvalCallback, CallbackList,CheckpointCallback
+from stable_baselines3.common.callbacks import EvalCallback, CallbackList,CheckpointCallback
 import datetime
 
 
@@ -60,19 +59,19 @@ env.reset()
 
 
 
-# model= DQN(MlpPolicy,env,verbose=1,
-#            tensorboard_log="../Data/tensorboard_log_fello/")
-#
-#
-#
-#
-# timetemp=datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-# checkpoint_callback=CheckpointCallback(save_freq=100, save_path='../Data/'+timetemp,name_prefix='deeq_highway_check')
-# callbacks=CallbackList([checkpoint_callback])
-# model.learn(2000,callback=callbacks)
-# model.save('../Data/hellohighway'+timetemp)
-#
-# del model
+model= DQN(MlpPolicy,env,verbose=1,
+           tensorboard_log="../Data/tensorboard_log_fello/")
+
+
+
+
+timetemp=datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+checkpoint_callback=CheckpointCallback(save_freq=105550, save_path='../Data/'+timetemp,name_prefix='deeq_highway_check')
+callbacks=CallbackList([checkpoint_callback])
+model.learn(20,callback=callbacks)
+model.save('../Data/hellohighway'+timetemp)
+
+del model
 
 '''
 ACTIONS_ALL = {
@@ -84,17 +83,21 @@ ACTIONS_ALL = {
     }
 
 
+
 '''
 
 
-model=DQN.load(('../Data/hellohighway'),env)
+model=DQN.load(('../Data/hellohighway'+timetemp),env)
 obs=env.reset()
 i=0
 ve=[]
-while i<100:
-    i=i+1
+for i in range(10):
+
     action, _state = model.predict(obs)
+    action=int(action)
+    print(i,action)
     # print(action,_state)
+    print(type(action))
     obs,reward,dones,info=env.step(action)
     ego_speed=obs[0,1]*30
     ve.append(ego_speed)
@@ -102,8 +105,9 @@ while i<100:
     # print(ego_speed,f_speed)
 
     # print(obs,reward,dones,info)
-    # env.render()
+    env.render()
 
-plt.plot(ve)
 
-plt.show()
+
+
+

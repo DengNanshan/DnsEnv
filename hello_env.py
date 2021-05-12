@@ -1,11 +1,11 @@
 import gym
 import highway_env
 from matplotlib import pyplot as plt
-from stable_baselines.deepq.policies import MlpPolicy
-from stable_baselines import DQN
-import tensorflow as tf
+from stable_baselines3.dqn.policies import MlpPolicy
+from stable_baselines3 import DQN
+import torch
 
-from stable_baselines.common.callbacks import EvalCallback, CallbackList,CheckpointCallback
+from stable_baselines3.common.callbacks import EvalCallback, CallbackList,CheckpointCallback
 import datetime
 
 
