@@ -11,17 +11,17 @@ import datetime
 
 
 config = {
+    "manual_control":True,
     "observation": {
         "type": "Kinematics",
         "vehicles_count": 2,
-        "features": ["presence", "x", "y", "vx", "vy", "cos_h", "sin_h"],
+        # "features": ["presence", "x", "y", "vx", "vy", "cos_h", "sin_h"],
+        "features": ["x", "vx"],
         "features_range": {
             "x": [-100, 100],
-            "y": [-100, 100],
-            "vx": [-20, 20],
-            "vy": [-20, 20]
+            "vx": [-30, 30],
         },
-        "absolute": False,
+        "absolute": True,
         "order": "sorted"
     },
     "action": {
@@ -29,14 +29,14 @@ config = {
     },
     "lanes_count": 1,
     "initial_lane_id": None,
-    "vehicles_count": 50,
+    "vehicles_count": 1,
     "controlled_vehicles": 1,
     "duration": 40,  # [s]
-    "ego_spacing": 2,
+    "ego_spacing": 10,
     "initial_spacing": 2,
     "collision_reward": -1,  # The reward received when colliding with a vehicle.
-    "reward_speed_range": [20, 30],  # [m/s] The reward for high speed is mapped linearly from this range to [0, HighwayEnv.HIGH_SPEED_REWARD].
-    "simulation_frequency": 15,  # [Hz]
+    "reward_speed_range": [0, 30],  # [m/s] The reward for high speed is mapped linearly from this range to [0, HighwayEnv.HIGH_SPEED_REWARD].
+    "simulation_frequency": 1,  # [Hz]
     "policy_frequency": 1,  # [Hz]
     "other_vehicles_type": "highway_env.vehicle.behavior.IDMVehicle",
     "screen_width": 600,  # [px]
@@ -64,23 +64,58 @@ env.reset()
 #
 #
 # timetemp=datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-# checkpoint_callback=CheckpointCallback(save_freq=100, save_path='../Data/'+timetemp,name_prefix='deeq_highway_check')
+# checkpoint_callback=CheckpointCallback(save_freq=1000, save_path='../Data/'+timetemp,name_prefix='deeq_highway_check')
 # callbacks=CallbackList([checkpoint_callback])
-# model.learn(20000,callback=callbacks)
+# model.learn(1000,callback=callbacks)
 # model.save('../Data/hellohighway')
 #
 # del model
-#
+
 # model=DQN.load(('../Data/hellohighway'),env)
 # obs=env.reset()
-i=0
-while i<100:
-    i=i+1
-    # action, _state = model.predict(obs)
-    action=1
-    obs,reward,dones,info=env.step(action)
-    print(reward)
-    # env.render()
+# i=0
+# while i<100:
+#     i=i+1
+#     # action, _state = model.predict(obs)
+#     action=1
+#     obs,reward,dones,info=env.step(action)
+#     print(reward)
+#     # env.render()
 
+
+
+
+
+
+
+# import gym
+# import highway_env
+# env = gym.make("highway-v0")
+# env.configure({
+#     "manual_control": True
+# })
+#
+# env.reset()
+'''
+
+ACTIONS_ALL = {
+        0: 'LANE_LEFT',
+        1: 'IDLE',
+        2: 'LANE_RIGHT',
+        3: 'FASTER',
+        4: 'SLOWER'
+    }
+'''
+
+
+
+done = False
+env.render()
+while not done:
+    a,b,c,d=env.step(4)  # with manual control, these actions are ignored
+
+    # a,b,c,d=env.step(env.action_space.sample())  # with manual control, these actions are ignored
+    print(a,b,c)
+    env.render()
 
 

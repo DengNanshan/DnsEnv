@@ -57,26 +57,29 @@ env.reset()
 
 
 
-model= DQN(MlpPolicy,env,verbose=1,
-           tensorboard_log="../Date/tensorboard_log/")
+# model= DQN(MlpPolicy,env,verbose=1,
+#            tensorboard_log="../Date/tensorboard_log/")
+#
+#
+#
+#
+# timetemp=datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+# checkpoint_callback=CheckpointCallback(save_freq=100, save_path='../Data/'+timetemp,name_prefix='deeq_highway_check')
+# callbacks=CallbackList([checkpoint_callback])
+# model.learn(20000,callback=callbacks)
+# model.save('../Data/hellohighway')
+#
+# del model
+#
+# model=DQN.load(('../Data/hellohighway'),env)
+# obs=env.reset()
 
 
-
-
-timetemp=datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-checkpoint_callback=CheckpointCallback(save_freq=100, save_path='../Data/'+timetemp,name_prefix='deeq_highway_check')
-callbacks=CallbackList([checkpoint_callback])
-model.learn(20000,callback=callbacks)
-model.save('../Data/hellohighway')
-
-del model
-
-model=DQN.load(('../Data/hellohighway'),env)
-obs=env.reset()
-# while (True):
-#     action, _state = model.predict(obs)
-#     obs,reward,dones,info=env.step(action)
-#     env.render()
+while (True):
+    # action, _state = model.predict(obs)
+    obs,reward,dones,info=env.step(1)
+    print(obs,reward,dones,info)
+    env.render()
 
 
 
