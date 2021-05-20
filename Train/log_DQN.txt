@@ -1,0 +1,13 @@
+todo   speed->               DQN->SAC
+
+
+DQN 22  =DQN "y": [-10, 10],  "vehicles_count": 5,   "lanes_count": 2,
+
+DQN 21 countinue 16   exp =0.05
+DQN 20  vehicle count 2       "features": ["x", "y", "vx","vy"], exploration_fraction= 0.1,
+DQN 19  learning rate 0.001->0.1  gamma-0.7->0.3
+DQN 18  vehicle count 30->10
+DQN 17  =15  vehicle count 50->30 evaluate 10000->1000
+DQN 16  start 10000->1000   vehicle count 50->10
+    result  ok 10+   QN 15  gamma 0.99-> 0.7
+DQN 14  line3  vehicle 50  gamma 0.99 evaluate 10000 start 10000

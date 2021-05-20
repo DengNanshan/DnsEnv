@@ -15,13 +15,15 @@ import datetime
 config = {
     "observation": {
         "type": "Kinematics",
-        "vehicles_count": 2,
+        "vehicles_count": 2,  # !!!!!!!!!!!!
         # "features": ["presence", "x", "y", "vx", "vy", "cos_h", "sin_h"],
-        "features": ["x", "vx"],
+        "features": ["x", "y", "vx","vy", "cos_h", "sin_h"],
 
         "features_range": {
             "x": [-100, 100],
+            "y": [-100, 100],
             "vx": [-30, 30],
+            "vy": [-30, 30],
         },
         "absolute": False,
         "order": "sorted"
@@ -31,15 +33,19 @@ config = {
     },
     "lanes_count": 1,
     "initial_lane_id": None,
-    "vehicles_count": 1,
+    "vehicles_count": 3,                # ! !!!!!!!!!!!
     "controlled_vehicles": 1,
-    "duration": 50,  # [s]
+    "duration": 50,  # [step]             # !!!!!!!!!!!!!!
     "ego_spacing": 2,
     "initial_spacing": 2,
-    "collision_reward": -1,  # The reward received when colliding with a vehicle.
+    "collision_reward": -1000,  # The reward received when colliding with a vehicle.
     "reward_speed_range": [0, 30],  # [m/s] The reward for high speed is mapped linearly from this range to [0, HighwayEnv.HIGH_SPEED_REWARD].
+    "right_lane_reward": 0,  # The reward received when driving on the right-most lanes, linearly mapped to
+    # zero for other lanes.
+    "high_speed_reward": 1,  # The reward received when driving at full speed, linearly mapped to zero for
+    # lower speeds according to config["reward_speed_range"].
     "simulation_frequency": 10,  # [Hz]
-    "policy_frequency": 10,  # [Hz]
+    "policy_frequency": 1,  # [Hz]
     "other_vehicles_type": "highway_env.vehicle.behavior.IDMVehicle",
     "screen_width": 600,  # [px]
     "screen_height": 150,  # [px]
@@ -59,19 +65,25 @@ env.reset()
 
 
 
-model= DQN(MlpPolicy,env,verbose=1,
-           tensorboard_log="../Data/tensorboard_log_fello/")
-
-
-
-
-timetemp=datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-checkpoint_callback=CheckpointCallback(save_freq=105550, save_path='../Data/'+timetemp,name_prefix='deeq_highway_check')
-callbacks=CallbackList([checkpoint_callback])
-model.learn(20,callback=callbacks)
-model.save('../Data/hellohighway'+timetemp)
-
-del model
+# model= DQN(MlpPolicy,env,verbose=1,
+#            tensorboard_log="../../Data/tensorboard_log_fello/",
+#            exploration_fraction= 0.3,
+#            exploration_initial_eps = 1.0,
+#            exploration_final_eps= 0.05,
+#            learning_rate=0.01,)
+#
+#
+#
+#
+#
+# timetemp=datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+# checkpoint_callback=CheckpointCallback(save_freq=1000, save_path='../../Data/'+timetemp,name_prefix='deeq_highway_check')
+# E=EvalCallback(eval_env=env,eval_freq=1000,log_path='../../Data/'+timetemp,best_model_save_path='../../Data/'+timetemp)
+# callbacks=CallbackList([checkpoint_callback,E])
+# model.learn(200000,callback=callbacks,eval_freq=1000)
+# model.save('../../Data/hellohighway0518_DQN13')
+#
+# del model
 
 '''
 ACTIONS_ALL = {
@@ -87,18 +99,19 @@ ACTIONS_ALL = {
 '''
 
 
-model=DQN.load(('../Data/hellohighway'+timetemp),env)
+model=DQN.load(('../../Data/2021_05_18_11_59_46/best_model'),env)
 obs=env.reset()
 i=0
 ve=[]
-for i in range(10):
+for i in range(1000):
 
     action, _state = model.predict(obs)
     action=int(action)
-    print(i,action)
+    # print('action',action)
     # print(action,_state)
-    print(type(action))
+    # print(type(action))
     obs,reward,dones,info=env.step(action)
+    print('action',action,' ',reward)
     ego_speed=obs[0,1]*30
     ve.append(ego_speed)
     f_speed=obs[1,1]*30+ego_speed

@@ -27,7 +27,7 @@ config = {
     "action": {
         "type": "DiscreteMetaAction",
     },
-    "lanes_count": 4,
+    "lanes_count": 1,
     "initial_lane_id": None,
     "vehicles_count": 1,
     "controlled_vehicles": 1,
@@ -112,7 +112,7 @@ ACTIONS_ALL = {
 done = False
 env.render()
 while not done:
-    a,b,c,d=env.step(4)  # with manual control, these actions are ignored
+    a,b,c,d=env.step(3)  # with manual control, these actions are ignored
 
     # a,b,c,d=env.step(env.action_space.sample())  # with manual control, these actions are ignored
     print(a,b,c)

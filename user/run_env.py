@@ -13,13 +13,15 @@ import datetime
 config = {
     "observation": {
         "type": "Kinematics",
-        "vehicles_count": 5,
-        "features": ["presence", "x", "y", "vx", "vy", "cos_h", "sin_h"],
+        "vehicles_count": 5,  # !!!!!!!!!!!!
+        # "features": ["presence", "x", "y", "vx", "vy", "cos_h", "sin_h"],
+        "features": ["x", "y", "vx","vy", "cos_h", "sin_h"],
+
         "features_range": {
             "x": [-100, 100],
             "y": [-100, 100],
-            "vx": [-20, 20],
-            "vy": [-20, 20]
+            "vx": [-30, 30],
+            "vy": [-30, 30],
         },
         "absolute": False,
         "order": "sorted"
@@ -27,17 +29,17 @@ config = {
     "action": {
         "type": "DiscreteMetaAction",
     },
-    "lanes_count": 1,
+    "lanes_count": 2,
     "initial_lane_id": None,
-    "vehicles_count": 50,
+    "vehicles_count": 50,                # ! !!!!!!!!!!!
     "controlled_vehicles": 1,
-    "duration": 40,  # [s]
+    "duration": 50,  # [step]             # !!!!!!!!!!!!!!
     "ego_spacing": 2,
     "initial_spacing": 2,
-    "collision_reward": -1,  # The reward received when colliding with a vehicle.
-    "reward_speed_range": [20, 30],  # [m/s] The reward for high speed is mapped linearly from this range to [0, HighwayEnv.HIGH_SPEED_REWARD].
-    "simulation_frequency": 15,  # [Hz]
-    "policy_frequency": 1,  # [Hz]
+    "collision_reward": -1000,  # The reward received when colliding with a vehicle.
+    "reward_speed_range": [0, 30],  # [m/s] The reward for high speed is mapped linearly from this range to [0, HighwayEnv.HIGH_SPEED_REWARD].
+    "simulation_frequency": 10,  # [Hz]
+    "policy_frequency": 10,  # [Hz]
     "other_vehicles_type": "highway_env.vehicle.behavior.IDMVehicle",
     "screen_width": 600,  # [px]
     "screen_height": 150,  # [px]
@@ -49,7 +51,6 @@ config = {
     "vehicles_density": 1,
     "offroad_terminal": False
 }
-
 
 env = gym.make('highway-v0')
 env.configure(config)
@@ -71,13 +72,13 @@ env.reset()
 #
 # del model
 #
-# model=DQN.load(('../Data/hellohighway'),env)
-# obs=env.reset()
+model=DQN.load(('../Data/hellohighway'),env)
+obs=env.reset()
 
 
 while (True):
-    # action, _state = model.predict(obs)
-    obs,reward,dones,info=env.step(1)
+    action, _state = model.predict(obs)
+    obs,reward,dones,info=env.step(action)
     print(obs,reward,dones,info)
     env.render()
 
