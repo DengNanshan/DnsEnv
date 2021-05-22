@@ -15,7 +15,7 @@ import datetime
 config = {
     "observation": {
         "type": "Kinematics",
-        "vehicles_count": 2,  # !!!!!!!!!!!!
+        "vehicles_count": 3,  # !!!!!!!!!!!!
         # "features": ["presence", "x", "y", "vx", "vy", "cos_h", "sin_h"],
         "features": ["x", "y", "vx","vy"],
 
@@ -70,22 +70,23 @@ model= DQN(MlpPolicy,env,verbose=1,
            exploration_fraction= 0.1,
            exploration_initial_eps = 1.0,
            exploration_final_eps= 0.05,
-           learning_rate=0.1,
+           learning_rate=0.01,
            learning_starts=100,
-           gamma=0.3)
+           gamma=0.9)
 
 
 
 
-#
-# timetemp=datetime.datetime.now().strftime("DQN22%Y_%m_%d_%H_%M_%S")
-# checkpoint_callback=CheckpointCallback(save_freq=1000, save_path='../../Data/'+timetemp,name_prefix='deeq_highway_check')
-# E=EvalCallback(eval_env=env,eval_freq=1000,log_path='../../Data/'+timetemp,best_model_save_path='../../Data/'+timetemp)
-# callbacks=CallbackList([checkpoint_callback,E])
-# model.learn(300000,callback=callbacks,eval_freq=1000)
-# model.save('../../Data/DQN14_V5_L4_DQN22')
-#
-# del model
+
+timetemp=datetime.datetime.now().strftime("DQN0%Y_%m_%d_%H_%M_%S")
+checkpoint_callback=CheckpointCallback(save_freq=1000, save_path='../../Data/'+timetemp,name_prefix='deeq_highway_check')
+E=EvalCallback(eval_env=env,eval_freq=1000,log_path='../../Data/'+timetemp,best_model_save_path='../../Data/'+timetemp)
+callbacks=CallbackList([checkpoint_callback,E])
+model.learn(300000,callback=callbacks)
+# model.learn(30000)
+model.save('../../Data/DQN30')
+
+del model
 
 '''
 ACTIONS_ALL = {
@@ -101,7 +102,7 @@ ACTIONS_ALL = {
 '''
 
 
-model=DQN.load(('../../Data/DQN14_V5_L4_DQN22'),env)
+model=DQN.load(('../../Data/DQN30'),env)
 obs=env.reset()
 i=0
 ve=[]

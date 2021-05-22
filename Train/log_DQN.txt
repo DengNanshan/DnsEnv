@@ -1,6 +1,13 @@
-todo   speed->               DQN->SAC
+todo   speed->               DQN->SAC    reward = -30?
 
 
+30-34 bug
+
+DQN 30-31  sb1->sb3
+DQN 29  vehicle 2->4
+    result
+DQN 28  gamma 0.9  learning rate 0.01
+DQN 23  change to sb1
 DQN 22  =DQN "y": [-10, 10],  "vehicles_count": 5,   "lanes_count": 2,
 
 DQN 21 countinue 16   exp =0.05
@@ -11,3 +18,30 @@ DQN 17  =15  vehicle count 50->30 evaluate 10000->1000
 DQN 16  start 10000->1000   vehicle count 50->10
     result  ok 10+   QN 15  gamma 0.99-> 0.7
 DQN 14  line3  vehicle 50  gamma 0.99 evaluate 10000 start 10000
+
+
+
+
+Traceback (most recent call last):
+  File "/home/be-happy/PycharmProjects/DNS/DnsEnv/Train/0520_DQN30_sb3.py", line 86, in <module>
+    model.learn(300000)
+  File "/home/be-happy/PycharmProjects/DNS/stable_baselines3/dqn/dqn.py", line 249, in learn
+    reset_num_timesteps=reset_num_timesteps,
+  File "/home/be-happy/PycharmProjects/DNS/stable_baselines3/common/off_policy_algorithm.py", line 360, in learn
+    log_interval=log_interval,
+  File "/home/be-happy/PycharmProjects/DNS/stable_baselines3/common/off_policy_algorithm.py", line 594, in collect_rollouts
+    self._on_step()
+  File "/home/be-happy/PycharmProjects/DNS/stable_baselines3/dqn/dqn.py", line 150, in _on_step
+    polyak_update(self.q_net.parameters(), self.q_net_target.parameters(), self.tau)
+  File "/home/be-happy/PycharmProjects/DNS/stable_baselines3/common/utils.py", line 405, in polyak_update
+    for param, target_param in zip_strict(params, target_params):
+  File "/home/be-happy/PycharmProjects/DNS/stable_baselines3/common/utils.py", line 378, in zip_strict
+    if sentinel in combo:
+TypeError: eq() received an invalid combination of arguments - got (object), but expected one of:
+ * (Tensor other)
+      didn't match because some of the arguments have invalid types: (!object!)
+ * (Number other)
+      didn't match because some of the arguments have invalid types: (!object!)
+
+
+Process finished with exit code 1

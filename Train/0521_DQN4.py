@@ -9,13 +9,12 @@ import torch as th
 
 from stable_baselines3.common.callbacks import EvalCallback, CallbackList,CheckpointCallback
 import datetime
-
-
+import time
 
 config = {
     "observation": {
         "type": "Kinematics",
-        "vehicles_count": 2,  # !!!!!!!!!!!!
+        "vehicles_count": 5,  # !!!!!!!!!!!!
         # "features": ["presence", "x", "y", "vx", "vy", "cos_h", "sin_h"],
         "features": ["x", "y", "vx","vy"],
 
@@ -31,14 +30,14 @@ config = {
     "action": {
         "type": "DiscreteMetaAction",
     },
-    "lanes_count": 2,
+    "lanes_count": 4,
     "initial_lane_id": None,
-    "vehicles_count": 5,                # ! !!!!!!!!!!!
+    "vehicles_count": 10,                # ! !!!!!!!!!!!
     "controlled_vehicles": 1,
     "duration": 50,  # [step]             # !!!!!!!!!!!!!!
     "ego_spacing": 2,
     "initial_spacing": 2,
-    "collision_reward": -1000,  # The reward received when colliding with a vehicle.
+    "collision_reward": -1,  # The reward received when colliding with a vehicle.
     "reward_speed_range": [0, 30],  # [m/s] The reward for high speed is mapped linearly from this range to [0, HighwayEnv.HIGH_SPEED_REWARD].
     "right_lane_reward": 0,  # The reward received when driving on the right-most lanes, linearly mapped to
     # zero for other lanes.
@@ -66,26 +65,28 @@ env.reset()
 
 
 model= DQN(MlpPolicy,env,verbose=1,
-           tensorboard_log="../../Data/tensorboard_log_fello/",
+           tensorboard_log="../../Data2/tensorboard_log_fello/",
            exploration_fraction= 0.1,
            exploration_initial_eps = 1.0,
            exploration_final_eps= 0.05,
-           learning_rate=0.1,
+           learning_rate=0.01,
            learning_starts=100,
-           gamma=0.3)
+           gamma=0.9)
 
+timetemp=datetime.datetime.now().strftime("DQN4%Y_%m_%d_%H_%M_%S")
+checkpoint_callback=CheckpointCallback(save_freq=1000,
+                                       save_path='../../Data2/'+timetemp,
+                                       name_prefix='deeq_highway_check',
+                                       verbose=1)
 
+E=EvalCallback(eval_env=env,eval_freq=1000,log_path='../../Data2/'+timetemp,best_model_save_path='../../Data2/'+timetemp)
 
+callbacks=CallbackList([checkpoint_callback,E])
+model.learn(100000,callback=callbacks)
 
-#
-# timetemp=datetime.datetime.now().strftime("DQN22%Y_%m_%d_%H_%M_%S")
-# checkpoint_callback=CheckpointCallback(save_freq=1000, save_path='../../Data/'+timetemp,name_prefix='deeq_highway_check')
-# E=EvalCallback(eval_env=env,eval_freq=1000,log_path='../../Data/'+timetemp,best_model_save_path='../../Data/'+timetemp)
-# callbacks=CallbackList([checkpoint_callback,E])
-# model.learn(300000,callback=callbacks,eval_freq=1000)
-# model.save('../../Data/DQN14_V5_L4_DQN22')
-#
-# del model
+model.save('../../Data2/DQN4')
+
+del model
 
 '''
 ACTIONS_ALL = {
@@ -101,10 +102,11 @@ ACTIONS_ALL = {
 '''
 
 
-model=DQN.load(('../../Data/DQN14_V5_L4_DQN22'),env)
+model=DQN.load(('../../Data2/DQN4'),env)
 obs=env.reset()
 i=0
 ve=[]
+begin = time.time()
 for i in range(1000):
 
     action, _state = model.predict(obs)
@@ -121,6 +123,11 @@ for i in range(1000):
 
     # print(obs,reward,dones,info)
     env.render()
+    end=time.time()
+    time.sleep(0.1)
+    # if end-begin<1:
+    #     time.sleep(1-end+begin)
+    # begin=end
 
 
 

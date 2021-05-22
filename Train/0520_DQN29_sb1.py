@@ -3,19 +3,18 @@ import gym
 import highway_env
 import matplotlib
 from matplotlib import pyplot as plt
-from stable_baselines3.dqn.policies import MlpPolicy
-from stable_baselines3 import DQN
+from stable_baselines.deepq.policies import MlpPolicy
+from stable_baselines import DQN
 import torch as th
 
 from stable_baselines3.common.callbacks import EvalCallback, CallbackList,CheckpointCallback
 import datetime
-
-
+import time
 
 config = {
     "observation": {
         "type": "Kinematics",
-        "vehicles_count": 2,  # !!!!!!!!!!!!
+        "vehicles_count": 3,  # !!!!!!!!!!!!
         # "features": ["presence", "x", "y", "vx", "vy", "cos_h", "sin_h"],
         "features": ["x", "y", "vx","vy"],
 
@@ -65,25 +64,22 @@ env.reset()
 
 
 
-model= DQN(MlpPolicy,env,verbose=1,
-           tensorboard_log="../../Data/tensorboard_log_fello/",
-           exploration_fraction= 0.1,
-           exploration_initial_eps = 1.0,
-           exploration_final_eps= 0.05,
-           learning_rate=0.1,
-           learning_starts=100,
-           gamma=0.3)
-
-
-
-
+# model= DQN(MlpPolicy,env,verbose=1,
+#            tensorboard_log="../../Data/tensorboard_log_fello/",
+#            exploration_fraction= 0.1,
+#            exploration_initial_eps = 1.0,
+#            exploration_final_eps= 0.05,
+#            learning_rate=0.01,
+#            learning_starts=100,
+#            gamma=0.9)
 #
-# timetemp=datetime.datetime.now().strftime("DQN22%Y_%m_%d_%H_%M_%S")
+# timetemp=datetime.datetime.now().strftime("DQN29%Y_%m_%d_%H_%M_%S")
 # checkpoint_callback=CheckpointCallback(save_freq=1000, save_path='../../Data/'+timetemp,name_prefix='deeq_highway_check')
 # E=EvalCallback(eval_env=env,eval_freq=1000,log_path='../../Data/'+timetemp,best_model_save_path='../../Data/'+timetemp)
-# callbacks=CallbackList([checkpoint_callback,E])
-# model.learn(300000,callback=callbacks,eval_freq=1000)
-# model.save('../../Data/DQN14_V5_L4_DQN22')
+# callbacks=CallbackList([checkpoint_callback])
+# # model.learn(300000,callback=callbacks)
+# model.learn(300000)
+# model.save('../../Data/DQN29')
 #
 # del model
 
@@ -101,10 +97,11 @@ ACTIONS_ALL = {
 '''
 
 
-model=DQN.load(('../../Data/DQN14_V5_L4_DQN22'),env)
+model=DQN.load(('../../Data/DQN29'),env)
 obs=env.reset()
 i=0
 ve=[]
+begin = time.time()
 for i in range(1000):
 
     action, _state = model.predict(obs)
@@ -121,6 +118,10 @@ for i in range(1000):
 
     # print(obs,reward,dones,info)
     env.render()
+    end=time.time()
+    if end-begin<1:
+        time.sleep(1-end+begin)
+    begin=end
 
 
 
