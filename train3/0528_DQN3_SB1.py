@@ -96,7 +96,7 @@ env.reset()
 # callbacks=CallbackList([checkpoint_callback,E])
 # model.learn(10000,callback=callbacks)
 #
-# model.save('../../Data/DQN3')
+# model.save('../../Data/DQN3_model')
 #
 # del model
 
@@ -114,7 +114,7 @@ ACTIONS_ALL = {
 '''
 
 
-model=DQN.load(('../../Data/DQN3'),env)
+model=DQN.load(('../../Data/DQN3_model'),env)
 obs=env.reset()
 i=0
 ve=[]

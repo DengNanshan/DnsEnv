@@ -122,7 +122,8 @@ begin = time.time()
 dones = False
 for i in range(1000):
 
-    action, _state = model.predict(obs)
+    action, _state = model.predict(obs,deterministic=False)
+    action, _state = model.predict(obs, deterministic=True)
     print(_state)
     # print('action',action)
     # print(action,_state)

@@ -73,7 +73,7 @@ env.reset()
 #            learning_starts=100,
 #            gamma=0.9)
 #
-# timetemp=datetime.datetime.now().strftime("DQN3%Y_%m_%d_%H_%M_%S")
+# timetemp=datetime.datetime.now().strftime("DQN3_model%Y_%m_%d_%H_%M_%S")
 # checkpoint_callback=CheckpointCallback(save_freq=1000,
 #                                        save_path='../../Data2/'+timetemp,
 #                                        name_prefix='deeq_highway_check',
@@ -84,7 +84,7 @@ env.reset()
 # callbacks=CallbackList([checkpoint_callback,E])
 # model.learn(100000,callback=callbacks)
 #
-# model.save('../../Data2/DQN3')
+# model.save('../../Data2/DQN3_model')
 #
 # del model
 

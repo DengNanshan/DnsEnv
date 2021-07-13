@@ -97,7 +97,7 @@ E=EvalCallback(eval_env=env,eval_freq=1000,log_path=dir+timetemp,best_model_save
 callbacks=CallbackList([checkpoint_callback,E])
 model.learn(10000,callback=callbacks)
 
-model.save(dir+'/DQN3')
+model.save(dir+'/DQN3_model')
 #
 # del model
 

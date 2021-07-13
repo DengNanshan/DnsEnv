@@ -72,7 +72,7 @@ env = gym.make('highway-v0')
 env.configure(config)
 env.reset()
 
-model=DQN.load(('../../Data/DQN3'),env)
+model=DQN.load(('../../Data/DQN3_model'),env)
 
 model.exploration_initial_eps=0.1
 model.exploration_final_eps=0.1

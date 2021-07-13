@@ -76,7 +76,7 @@ env.reset()
 
 timetemp=datetime.datetime.now().strftime("DQNtest_%Y_%m_%d_%H_%M_%S")
 dir = ('../../Data0531/')
-name=('DQN3')
+name=('DQN3_model')
 model= DQN(MlpPolicy,env,verbose=1,
            tensorboard_log=dir+'tensorboard_log/',
            exploration_fraction= 0.1,

@@ -1,0 +1,2 @@
+
+0624 change the init ego speed = environment speed  and rerun the three different speed distribution
